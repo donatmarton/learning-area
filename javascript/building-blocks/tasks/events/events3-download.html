@@ -43,6 +43,11 @@
   let buttonBar = document.querySelector('.button-bar');
 
   // Add your code here
+  buttonBar.addEventListener('click', changeColor);
+  function changeColor(event) {
+    const color = event.target.getAttribute('data-color');
+    this.style.background = color;
+  }
 
   </script>
 

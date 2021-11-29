@@ -52,6 +52,23 @@
     drawCircle(x, y, size);
 
     // Add your code here
+    document.addEventListener('keydown', moveCircle);
+    function moveCircle(event) {
+      switch(event.key) {
+        case 'd':
+          x += 5;
+          break;
+        case 'a':
+          x -= 5;
+          break;
+        case 's':
+          y += 5;
+          break;
+        case 'w':
+          y -= 5;
+      }
+      drawCircle(x, y, size);
+    }
 
   </script>
 
