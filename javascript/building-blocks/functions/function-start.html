@@ -21,7 +21,7 @@
 
       .msgBox button {
         background: none;
-        border: none;
+        border: 1px solid red;
         position: absolute;
         top: 0;
         right: 0;
@@ -35,7 +35,28 @@
     <button>Display message box</button>
 
     <script>
-      
+      function displayMessage() {
+        const html = document.querySelector('html');
+
+        const panel = document.createElement('div');
+        panel.setAttribute('class', 'msgBox');
+        html.appendChild(panel);
+
+        const msg = document.createElement('p');
+        msg.textContent = 'This is a message box';
+        panel.appendChild(msg);
+
+        const closeBtn = document.createElement('button');
+        closeBtn.textContent = 'x';
+        panel.appendChild(closeBtn);
+
+        closeBtn.onclick = function() {
+          panel.parentNode.removeChild(panel);
+        }
+      }
+      const btn = document.querySelector('button');
+      btn.onclick = displayMessage;
+
     </script>
   </body>
 </html>
