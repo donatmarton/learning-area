@@ -33,6 +33,15 @@
     }
 
     // Write your code below here
+    Shape.prototype.calcPerimeter = function() {
+      const perimeter = this.sides * this.sideLength;
+      console.log(`Perimeter is ${perimeter}`);
+    }
+
+    let square = new Shape('square', 4, 5);
+    square.calcPerimeter();
+    let triangle = new Shape('triangle', 3, 3);
+    triangle.calcPerimeter();
   </script>
 
 </html>
