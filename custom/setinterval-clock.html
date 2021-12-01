@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <title>Simple setInterval clock</title>
+    <style>
+      p {
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <p class="clock"></p>
+    <div class="stopwatch">
+      <button class="start">Start</button>
+      <button class="stop">Stop</button>
+      <button class="reset">Reset</button>
+      <p class="stopwatchTimer">00:00</p>
+    </div>
+    <script>
+      function displayTime() {
+        let date = new Date();
+        let time = date.toLocaleTimeString();
+        document.querySelector('.clock').textContent = time;
+      }
+      displayTime();
+      const createClock = setInterval(displayTime, 1000);
+
+      const start = document.querySelector('.start');
+      const stop = document.querySelector('.stop');
+      const reset = document.querySelector('.reset');
+      const stopwatchTimer = document.querySelector('.stopwatchTimer')
+
+      let startedDate;
+      let stopwatchInterval;
+      let residualTime = 0;
+
+      function updateStopwatch() {
+        const timeDifference = Date.now() - startedDate.getTime();
+        let date = new Date();
+        date.setTime(timeDifference + residualTime);
+        let mins = String(date.getMinutes()).padStart(2, '0');
+        let secs = String(date.getSeconds()).padStart(2, '0');
+        stopwatchTimer.textContent = `${mins}:${secs}`;
+      }
+       
+      start.addEventListener('click', () => {
+        stopwatchInterval = setInterval(updateStopwatch, 1000);
+        if (!startedDate) {
+          startedDate = new Date();
+        }
+        start.disabled = true;
+      });
+      stop.addEventListener('click', () => {
+        clearInterval(stopwatchInterval);
+        residualTime += Date.now() - startedDate.getTime();
+        residualTime = Math.floor(residualTime / 1000) * 1000; // chop off milisecs
+        startedDate = null;
+        start.disabled = false;
+      });
+      reset.addEventListener('click', () => {
+        clearInterval(stopwatchInterval);
+        residualTime = 0;
+        startedDate = null;
+        start.disabled = false;
+        stopwatchTimer.textContent = '00:00';
+      });
+
+
+    </script>
+  </body>
+</html>
