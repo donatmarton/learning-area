@@ -25,7 +25,17 @@
     </div>
 
     <script>
+      const div = document.querySelector('div');
+      
+      function resizeWindow() {
+        let winWidth = window.innerWidth;
+        let winHeight = window.innerHeight;
+        div.style.width = `${winWidth}px`;
+        div.style.height = `${winHeight}px`;
+      }
 
+      window.addEventListener('resize', resizeWindow);
+      resizeWindow();
     </script>
   </body>
 </html>
