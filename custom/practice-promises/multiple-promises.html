@@ -7,14 +7,15 @@
   <body>
     <p>This is my page</p>
     <script>
-      function fetchAndDecode(url, type) {
+      function fetchAndDecode(url) {
         return fetch(url).then(response => {
           if(!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           } else {
-            if(type === 'blob') {
+            const type = response.headers.get("content-type");
+            if(type === 'image/jpeg') {
               return response.blob();
-            } else if(type === 'text') {
+            } else if(type.startsWith("text/")) {
               return response.text();
             }
           }
@@ -24,29 +25,31 @@
         });
       }
 
-    let coffee = fetchAndDecode('coffee.jpg', 'blob');
-    let tea = fetchAndDecode('tea.jpg', 'blob');
-    let description = fetchAndDecode('description.txt', 'text');
+    let items = [
+      'coffee.jpg',
+      'tea.jpg',
+      'description.txt',
+    ];
+    let promises = [];
+    for (item of items) {
+      promises.push(fetchAndDecode(item));
+    }
 
-    Promise.all([coffee, tea, description]).then(values => {
+    Promise.all(promises).then(values => {
       console.log(values);
-      // Store each value returned from the promises in separate variables; create object URLs from the blobs
-      let objectURL1 = URL.createObjectURL(values[0]);
-      let objectURL2 = URL.createObjectURL(values[1]);
-      let descText = values[2];
-
-      // Display the images in <img> elements
-      let image1 = document.createElement('img');
-      let image2 = document.createElement('img');
-      image1.src = objectURL1;
-      image2.src = objectURL2;
-      document.body.appendChild(image1);
-      document.body.appendChild(image2);
-
-      // Display the text in a paragraph
-      let para = document.createElement('p');
-      para.textContent = descText;
-      document.body.appendChild(para);
+      for (value of values) {
+        if (value instanceof Blob) {
+          let objectURL = URL.createObjectURL(value);
+          let image = document.createElement('img');
+          image.src = objectURL;
+          document.body.appendChild(image);
+        } else if (typeof value === 'string') {
+          text = value;
+          let paragraph = document.createElement('p');
+          paragraph.textContent = text;
+          document.body.appendChild(paragraph);
+        }
+      }
     });
     </script>
   </body>
