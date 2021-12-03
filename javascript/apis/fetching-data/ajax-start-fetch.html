@@ -69,16 +69,19 @@
         updateDisplay(verse);
       });
 
-      function updateDisplay(verse) {
+      async function updateDisplay(verse) {
         const verseFile = verse.toLowerCase().replace(' ', '').concat('.txt');
+        /*        
+        fetch(verseFile).then( (response) => {
+          return response.text();
+        }).then( (text) => {
+          versePreview.textContent = text
+        });
+        */
+        let response = await fetch(verseFile);
+        let text = await response.text();
+        versePreview.textContent = text
         
-        let request = new XMLHttpRequest();
-        request.open('GET', verseFile);
-        request.responseType = 'text';
-        request.onload = (event) => {
-          versePreview.textContent = event.target.response;
-        };
-        request.send();
       }
 
       updateDisplay('Verse 1');
