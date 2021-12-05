@@ -1,4 +1,5 @@
 const saveButton = document.querySelector('.input-button');
+const tabButton = document.querySelector('.tab-button');
 const deleteButton = document.querySelector('.delete-button');
 const input = document.querySelector('.input-field');
 const leadList = document.querySelector('.lead-list');
@@ -16,6 +17,16 @@ function saveLead(event) {
   addLead(lead);
   updateLocalStorage();
 }
+
+
+tabButton.addEventListener('click', () => {
+  browser.tabs.query({currentWindow: true, active: true}).then( (tabs) => {
+    const lead = tabs[0].url;
+    myLeads.push(lead);
+    addLead(lead);
+    updateLocalStorage();
+  });
+});
 
 function renderLeads() {
   while(leadList.firstChild) {
